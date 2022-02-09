@@ -7,4 +7,3 @@
    alice_kinematics:=$(arg alice_kinematics)
   "/>
 </launch>
-
