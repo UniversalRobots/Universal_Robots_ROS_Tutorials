@@ -1,4 +1,5 @@
 # ur_example_dual_robot
+This demo is about integrating two robots into one URDF and starting a driver for both robots.
 
 ## Requirements & Build
 **ToDo**: This is very short atm.
@@ -10,14 +11,10 @@ dependencies using `rosdep install --ignore-src --from-paths . -r -y` and build 
 usual.
 
 ## Dual robot system
-This demo is about integrating two robots into one URDF and starting a driver for both robots.
 
 ### Requirements
-For this demo to work, you'll need **docker** installed and your user needs to be able to run docker
-containers. Further, we'll assume that your docker network has a default setup and that there is no
-other container running. (Your docker host will have the IP 172.17.0.1, the two URSim instances will
-use 172.17.0.2 and 172.17.0.3 for simplicity. This might change in the future to make things more
-robust)
+For this demo to work, you'll need **docker** and **docker-compose** installed and your user needs
+to be able to run docker containers.
 
 ### Startup
 You'll need two shells: One for starting two simulated robots using docker + ursim and one for the
@@ -28,8 +25,8 @@ In the first shell execute
 rosrun ur_example_dual_robot docker_alice_bob.sh
 ```
 Wait, until the robots are started up. You can connect to the robots using their web interface:
- - Alice: http://172.17.0.2:6080/vnc.html
- - Bob: http://172.17.0.3:6080/vnc.html
+ - Alice: [http://10.5.0.5:6080/vnc.html](http://10.5.0.5:6080/vnc.html)
+ - Bob: [http://10.5.0.6:6080/vnc.html](http://10.5.0.6:6080/vnc.html)
 
 When the robots have booted, start the driver instances as follows
 ```

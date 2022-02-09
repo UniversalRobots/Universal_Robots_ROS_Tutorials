@@ -3,7 +3,7 @@
   <!--Alice's arguments-->
   <arg name="alice_kinematics" default="$(find ur_description)/config/ur10e/default_kinematics.yaml"/>
   <arg name="alice_controller_config_file" default="$(find ur_example_dual_robot)/etc/alice_controllers.yaml"/>
-  <arg name="alice_ip" default="172.17.0.2"/>
+  <arg name="alice_ip" default="10.5.0.5"/>
   <arg name="alice_reverse_port" default="50004"/>
   <arg name="alice_script_sender_port" default="50005"/>
   <arg name="alice_trajectory_port" default="50006"/>
@@ -11,7 +11,7 @@
   <!--Bob's arguments-->
   <arg name="bob_kinematics" default="$(find ur_description)/config/ur3e/default_kinematics.yaml"/>
   <arg name="bob_controller_config_file" default="$(find ur_example_dual_robot)/etc/bob_controllers.yaml"/>
-  <arg name="bob_ip" default="172.17.0.3"/>
+  <arg name="bob_ip" default="10.5.0.6"/>
   <arg name="bob_reverse_port" default="50001"/>
   <arg name="bob_script_sender_port" default="50002"/>
   <arg name="bob_trajectory_port" default="50003"/>

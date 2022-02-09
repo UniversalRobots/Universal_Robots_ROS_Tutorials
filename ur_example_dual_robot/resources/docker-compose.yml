@@ -1,0 +1,29 @@
+version: "3"
+services:
+  alice:
+    image: universalrobots/ursim_e-series
+    environment:
+      - ROBOT_MODEL=UR10
+    networks:
+      ursim_net:
+        ipv4_address: 10.5.0.5
+    volumes:
+      - ./ursim/urcaps:/urcaps
+      - ./ursim/programs_alice:/ursim/programs
+  bob:
+    image: universalrobots/ursim_e-series
+    environment:
+      - ROBOT_MODEL=UR3
+    networks:
+      ursim_net:
+        ipv4_address: 10.5.0.6
+    volumes:
+      - ./ursim/urcaps:/urcaps
+      - ./ursim/programs_bob:/ursim/programs
+
+networks:
+  ursim_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/24
