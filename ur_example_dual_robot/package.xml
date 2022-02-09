@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ur_example_dual_robot</name>
+  <version>0.0.1</version>
+  <description>Example package that explains how to startup a system containing multiple robots.</description>
+
+  <maintainer email="exner@fzi.de">Felix Exner</maintainer>
+
+  <license>BSD-3-Clause</license>
+
+  <author email="exner@fzi.de">Felix Exner</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>joint_state_publisher_gui</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>rqt_joint_trajectory_controller</exec_depend>
+  <exec_depend>rviz</exec_depend>
+  <exec_depend>ur_description</exec_depend>
+  <exec_depend>ur_robot_driver</exec_depend>
+  <exec_depend>xacro</exec_depend>
+
+</package>
