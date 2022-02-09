@@ -1,9 +1,3 @@
-Examples
-========
-This section documents the examples created in `<https://github.com/UniversalRobots/Universal_Robots_ROS_Tutorials>`_.
-
-Those examples explain certain use cases in which the `ur_robot_driver <http://wiki.ros.org/ur_robot_driver>`_ could be used.
-
 Installation
 ------------
 The following sections will assume that you've created a catkin_workspace and you've cloned and
@@ -33,5 +27,3 @@ First, create a catkin_workspace, clone the repositories and build them:
 
 
 Remember to always source your workspace (as in the last line of the code snippet above) in every new shell.
-
-.. include:: dual_robot.rst
