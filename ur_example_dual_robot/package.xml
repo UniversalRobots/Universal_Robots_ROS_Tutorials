@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<package format="2">
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
   <name>ur_example_dual_robot</name>
   <version>0.0.1</version>
   <description>Example package that explains how to startup a system containing multiple robots.</description>
@@ -10,7 +11,7 @@
 
   <author email="exner@fzi.de">Felix Exner</author>
 
-  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>ament_cmake</buildtool_depend>
 
   <exec_depend>docker.io</exec_depend>
   <exec_depend>docker-compose</exec_depend>
@@ -21,5 +22,9 @@
   <exec_depend>ur_description</exec_depend>
   <exec_depend>ur_robot_driver</exec_depend>
   <exec_depend>xacro</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 
 </package>

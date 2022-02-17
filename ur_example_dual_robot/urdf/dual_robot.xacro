@@ -1,14 +1,50 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://wiki.ros.org/xacro" name="my_work_cell">
-  <!--Load the macro for creating a robot-->
-  <xacro:include filename="$(find ur_description)/urdf/inc/ur10e_macro.xacro"/>
-  <xacro:include filename="$(find ur_description)/urdf/inc/ur3e_macro.xacro"/>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="dual_robot_example">
+  <!-- import main macro -->
+  <xacro:include filename="$(find ur_description)/urdf/ur_macro.xacro"/>
 
-  <!--Instanciate the robots-->
-  <xacro:ur3e_robot prefix="bob_" kinematics_parameters_file="$(arg bob_kinematics)"/>
-  <xacro:ur10e_robot prefix="alice_" kinematics_parameters_file="$(arg alice_kinematics)" />
+  <!-- parameters -->
+  <xacro:arg name="transmission_hw_interface" default=""/>
+  <xacro:arg name="safety_limits" default="false"/>
+  <xacro:arg name="safety_pos_margin" default="0.15"/>
+  <xacro:arg name="safety_k_position" default="20"/>
+  <!-- ros2_control related parameters -->
+  <xacro:arg name="headless_mode" default="false" />
+  <!--   tool communication related parameters-->
+  <xacro:arg name="use_tool_communication" default="false" />
+  <xacro:arg name="tool_voltage" default="24" />
+  <xacro:arg name="tool_parity" default="0" />
+  <xacro:arg name="tool_baud_rate" default="115200" />
+  <xacro:arg name="tool_stop_bits" default="1" />
+  <xacro:arg name="tool_rx_idle_chars" default="1.5" />
+  <xacro:arg name="tool_tx_idle_chars" default="3.5" />
+  <xacro:arg name="tool_tcp_port" default="54321" />
 
-  <!--Let's create a sort of table where the robot stands on-->
+    <!-- Simulation parameters -->
+  <xacro:arg name="use_fake_hardware" default="false" />
+  <xacro:arg name="fake_sensor_commands" default="false" />
+  <xacro:arg name="sim_gazebo" default="false" />
+  <xacro:arg name="sim_ignition" default="false" />
+  <xacro:arg name="simulation_controllers" default="" />
+
+  <xacro:arg name="alice_ip" default="10.5.0.5"/>
+  <xacro:arg name="alice_type" default="ur10e"/>
+  <xacro:arg name="alice_reverse_port" default="50004"/>
+  <xacro:arg name="alice_script_sender_port" default="50005"/>
+  <xacro:arg name="bob_ip" default="10.5.0.6"/>
+  <xacro:arg name="bob_type" default="ur3e"/>
+  <xacro:arg name="bob_reverse_port" default="50001"/>
+  <xacro:arg name="bob_script_sender_port" default="50002"/>
+
+  <!-- initial position for simulations (Fake Hardware, Gazebo, Ignition) -->
+  <xacro:arg name="initial_positions_file" default="$(find ur_description)/config/initial_positions.yaml"/>
+
+  <!-- convert to property to use substitution in function -->
+  <xacro:property name="initial_positions_file" default="$(arg initial_positions_file)"/>
+
+  <!-- create link fixed to the "world" -->
+  <link name="world" />
+
   <link name="box">
     <visual>
       <origin xyz="0 0 0.5" rpy="0 0 0"/>
@@ -18,15 +54,108 @@
     </visual>
   </link>
 
-  <!--Define the robot poses on the table-->
-  <joint name="table_to_bob" type="fixed">
-    <parent link="box" />
-    <child link = "bob_base_link" />
+  <joint name="box_joint" type="fixed">
+    <parent link="world" />
+    <child link = "box" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+
+  <!--[> alice <]-->
+  <xacro:ur_robot
+    name="alice"
+    prefix="alice_"
+    parent="box"
+    joint_limits_parameters_file="$(find ur_description)/config/$(arg alice_type)/joint_limits.yaml"
+    kinematics_parameters_file="$(find ur_description)/config/$(arg alice_type)/default_kinematics.yaml"
+    physical_parameters_file="$(find ur_description)/config/$(arg alice_type)/physical_parameters.yaml"
+    visual_parameters_file="$(find ur_description)/config/$(arg alice_type)/visual_parameters.yaml"
+    transmission_hw_interface="$(arg transmission_hw_interface)"
+    safety_limits="$(arg safety_limits)"
+    safety_pos_margin="$(arg safety_pos_margin)"
+    safety_k_position="$(arg safety_k_position)"
+    use_fake_hardware="$(arg use_fake_hardware)"
+    fake_sensor_commands="$(arg fake_sensor_commands)"
+    sim_gazebo="$(arg sim_gazebo)"
+    sim_ignition="$(arg sim_ignition)"
+    headless_mode="$(arg headless_mode)"
+    initial_positions="${load_yaml(initial_positions_file)}"
+    use_tool_communication="$(arg use_tool_communication)"
+    tool_voltage="$(arg tool_voltage)"
+    tool_parity="$(arg tool_parity)"
+    tool_baud_rate="$(arg tool_baud_rate)"
+    tool_stop_bits="$(arg tool_stop_bits)"
+    tool_rx_idle_chars="$(arg tool_rx_idle_chars)"
+    tool_tx_idle_chars="$(arg tool_tx_idle_chars)"
+    tool_device_name="/tmp/tool_alice"
+    tool_tcp_port="$(arg tool_tcp_port)"
+    robot_ip="$(arg alice_ip)"
+    reverse_port="$(arg alice_reverse_port)"
+    script_sender_port="$(arg alice_script_sender_port)"
+    >
     <origin xyz="-0.5 0 1" rpy="0 0 0" />
-  </joint>
-  <joint name="table_to_alice" type="fixed">
-    <parent link="box" />
-    <child link = "alice_base_link" />
+  </xacro:ur_robot>
+
+  <!--[> bob <]-->
+  <xacro:ur_robot
+    name="bob"
+    prefix="bob_"
+    parent="box"
+    joint_limits_parameters_file="$(find ur_description)/config/$(arg bob_type)/joint_limits.yaml"
+    kinematics_parameters_file="$(find ur_description)/config/$(arg bob_type)/default_kinematics.yaml"
+    physical_parameters_file="$(find ur_description)/config/$(arg bob_type)/physical_parameters.yaml"
+    visual_parameters_file="$(find ur_description)/config/$(arg bob_type)/visual_parameters.yaml"
+    transmission_hw_interface="$(arg transmission_hw_interface)"
+    safety_limits="$(arg safety_limits)"
+    safety_pos_margin="$(arg safety_pos_margin)"
+    safety_k_position="$(arg safety_k_position)"
+    use_fake_hardware="$(arg use_fake_hardware)"
+    fake_sensor_commands="$(arg fake_sensor_commands)"
+    sim_gazebo="$(arg sim_gazebo)"
+    sim_ignition="$(arg sim_ignition)"
+    headless_mode="$(arg headless_mode)"
+    initial_positions="${load_yaml(initial_positions_file)}"
+    use_tool_communication="$(arg use_tool_communication)"
+    tool_voltage="$(arg tool_voltage)"
+    tool_parity="$(arg tool_parity)"
+    tool_baud_rate="$(arg tool_baud_rate)"
+    tool_stop_bits="$(arg tool_stop_bits)"
+    tool_rx_idle_chars="$(arg tool_rx_idle_chars)"
+    tool_tx_idle_chars="$(arg tool_tx_idle_chars)"
+    tool_device_name="/tmp/tool_bob"
+    tool_tcp_port="$(arg tool_tcp_port)"
+    robot_ip="$(arg bob_ip)"
+    reverse_port="$(arg bob_reverse_port)"
+    script_sender_port="$(arg bob_script_sender_port)"
+    >
     <origin xyz="0.5 0 1" rpy="0 0 0" />
-  </joint>
+  </xacro:ur_robot>
+
+  <xacro:if value="$(arg sim_gazebo)">
+    <!-- Gazebo plugins -->
+    <gazebo reference="world">
+    </gazebo>
+    <gazebo>
+      <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+        <parameters>$(arg simulation_controllers)</parameters>
+      </plugin>
+    </gazebo>
+  </xacro:if>
+
+  <xacro:if value="$(arg sim_ignition)">
+    <!-- Gazebo plugins -->
+    <gazebo reference="world">
+    </gazebo>
+    <gazebo>
+      <plugin filename="libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
+        <parameters>$(arg simulation_controllers)</parameters>
+        <controller_manager_node_name>alice_controller_manager</controller_manager_node_name>
+      </plugin>
+    </gazebo>
+    <gazebo>
+      <plugin filename="libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
+        <parameters>$(arg simulation_controllers)</parameters>
+        <controller_manager_node_name>bob_controller_manager</controller_manager_node_name>
+      </plugin>
+    </gazebo>
+  </xacro:if>
 </robot>

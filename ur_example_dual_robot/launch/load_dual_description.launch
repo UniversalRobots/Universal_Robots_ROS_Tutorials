@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-  <arg name="bob_kinematics" default="$(find ur_description)/config/ur3e/default_kinematics.yaml"/>
-  <arg name="alice_kinematics" default="$(find ur_description)/config/ur10e/default_kinematics.yaml"/>
-  <param name="robot_description" command="$(find xacro)/xacro '$(find ur_example_dual_robot)/urdf/dual_robot.xacro'
-   bob_kinematics:=$(arg bob_kinematics)
-   alice_kinematics:=$(arg alice_kinematics)
-  "/>
-</launch>

@@ -16,12 +16,31 @@ repos:
     hooks:
       - id: black
         args: ["--line-length=100"]
+  # Cmake hooks
   - repo: local
     hooks:
-      - id: catkin_lint
-        name: catkin_lint
-        description: Check package.xml and cmake files
-        entry: catkin_lint .
+      - id: ament_lint_cmake
+        name: ament_lint_cmake
+        description: Check format of CMakeLists.txt files.
+        stages: [commit]
+        entry: ament_lint_cmake
         language: system
-        always_run: true
-        pass_filenames: false
+        files: CMakeLists.txt$
+
+  # Copyright
+  - repo: local
+    hooks:
+      - id: ament_copyright
+        name: ament_copyright
+        description: Check if copyright notice is available in all files.
+        stages: [commit]
+        entry: ament_copyright
+        language: system
+  # Spellcheck in comments and docs
+  # skipping of *.svg files is not working...
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.0.0
+    hooks:
+      - id: codespell
+        args: ['--write-changes']
+        exclude: \.(svg|pyc)$
