@@ -1,6 +1,12 @@
 ---
-name: "Pull Request Docs Check"
-on: [pull_request]
+name: Pull Request Docs Check
+
+on:
+  push:
+    branches:
+      - main
+      - ros2
+  pull_request:
 
 jobs:
   docs:
