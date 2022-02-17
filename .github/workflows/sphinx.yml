@@ -13,11 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
       - name: Install dependencies
         run: |
-          python -m pip install -U pip
-          python -m pip install -r sphinx-rtd-theme
-
-      - uses: ammaraskar/sphinx-action@master
-        with:
-          docs-folder: "./ur_documentation/docs"
+          pip install sphinx-rtd-theme sphinx
+      - name: Build documentation
+        run: |
+          cd ur_documentation/docs
+          make html
