@@ -2,9 +2,8 @@
 Welcome to ur_documentation
 ***************************
 
-
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Contents:
 
    examples/toc

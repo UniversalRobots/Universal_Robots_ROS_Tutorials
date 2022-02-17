@@ -8,6 +8,8 @@ Those examples explain certain use cases in which the `ur_robot_driver <http://w
 
 
 .. toctree::
+   :maxdepth: 4
+   :caption: Contents:
 
    installation
-   dual_robot
+   dual_robot/toc
