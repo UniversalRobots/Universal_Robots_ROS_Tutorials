@@ -1,6 +1,8 @@
 ur_example_dual_robot
 ---------------------
 
+**NOTE: This package is currently work in progress**
+
 This demo is about integrating two robots into one URDF and starting a driver for both robots.
 
 Requirements & Build
