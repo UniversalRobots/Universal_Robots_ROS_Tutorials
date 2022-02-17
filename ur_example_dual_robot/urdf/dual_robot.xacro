@@ -8,25 +8,18 @@
   <xacro:ur3e_robot prefix="bob_" kinematics_parameters_file="$(arg bob_kinematics)"/>
   <xacro:ur10e_robot prefix="alice_" kinematics_parameters_file="$(arg alice_kinematics)" />
 
-  <!--Let's create a sort of table where the robot stands on-->
-  <link name="box">
-    <visual>
-      <origin xyz="0 0 0.5" rpy="0 0 0"/>
-      <geometry>
-        <box size="2 1 1"/>
-      </geometry>
-    </visual>
-  </link>
+  <!--common link where the tf tree originates from-->
+  <link name="world"/>
 
-  <!--Define the robot poses on the table-->
-  <joint name="table_to_bob" type="fixed">
-    <parent link="box" />
+  <!--Define the robot poses in the world-->
+  <joint name="world_to_bob" type="fixed">
+    <parent link="world" />
     <child link = "bob_base_link" />
-    <origin xyz="-0.5 0 1" rpy="0 0 0" />
+    <origin xyz="-0.5 0 0" rpy="0 0 0" />
   </joint>
-  <joint name="table_to_alice" type="fixed">
-    <parent link="box" />
+  <joint name="world_to_alice" type="fixed">
+    <parent link="world" />
     <child link = "alice_base_link" />
-    <origin xyz="0.5 0 1" rpy="0 0 0" />
+    <origin xyz="0.5 0 0" rpy="0 0 0" />
   </joint>
 </robot>
