@@ -3,3 +3,6 @@ programs.UR5
 programs.UR10
 programs.UR16
 ur_documentation/docs/build
+ur_example_dual_robot/resources/ursim/programs_*/external_control.old*
+ur_example_dual_robot/resources/ursim/programs_*/external_control.script
+ur_example_dual_robot/resources/ursim/programs_*/external_control.txt
