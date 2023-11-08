@@ -15,8 +15,8 @@ First we have to assemble all relevant files.
 
 .. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
     :language: py
-    :lineno-start: 9
-    :lines: 9 - 28
+    :start-at: def generate_launch_description():
+    :end-at: ur_output_recipe_filename = PathJoinSubstitution([ur_robot_driver_package, "resources", "rtde_output_recipe.txt"])
     :linenos: 
     :caption: my_robot_cell_control/launch/start_robot.launch.py
 
@@ -26,8 +26,8 @@ Next, we need to define all the arguments that we intend to pass through the she
 
 .. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
     :language: py
-    :lineno-start: 30
-    :lines: 30 - 54
+    :start-at: arg_robot_ip = DeclareLaunchArgument(
+    :end-before: robot_description_content = Command(
     :linenos: 
     :caption: my_robot_cell_control/launch/start_robot.launch.py
 
@@ -37,8 +37,8 @@ In the next step we need to load our `custom urdf <file:///disk/users/cg247/tut/
 
 .. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
     :language: py
-    :lineno-start: 57
-    :lines: 57 - 90
+    :start-at: robot_description_content = Command(
+    :end-at: robot_description = {"robot_description": robot_description_content}
     :linenos: 
     :caption: my_robot_cell_control/launch/start_robot.launch.py
 
@@ -48,8 +48,8 @@ We should begin by creating the **control node**, which requires our URDF, the u
 
 .. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
     :language: py
-    :lineno-start: 93
-    :lines: 93 - 102
+    :start-at: control_node = Node(
+    :end-before: controller_stopper_node = Node(
     :linenos: 
     :caption: my_robot_cell_control/launch/start_robot.launch.py
 
@@ -61,8 +61,8 @@ To function properly, we should specify the **consistent controllers** that must
 
 .. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
     :language: py
-    :lineno-start: 104
-    :lines: 104 - 121
+    :start-at: controller_stopper_node = Node(
+    :end-before: dashboard_client_node = Node(
     :linenos: 
     :caption: my_robot_cell_control/launch/start_robot.launch.py
 
@@ -71,8 +71,8 @@ The **dashboard node** needs the robot ip to be started.
 
 .. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
     :language: py
-    :lineno-start: 123
-    :lines: 123 - 129
+    :start-at: dashboard_client_node = Node(
+    :end-before: robot_state_publisher = Node(
     :linenos: 
     :caption: my_robot_cell_control/launch/start_robot.launch.py
 
@@ -80,8 +80,8 @@ The **robot state publisher** needs the urdf to be started.
 
 .. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
     :language: py
-    :lineno-start: 132
-    :lines: 132 - 138
+    :start-at: robot_state_publisher = Node(
+    :end-before: def spawn_controller(name, activate=True):
     :linenos: 
     :caption: my_robot_cell_control/launch/start_robot.launch.py
 
@@ -89,8 +89,8 @@ The last nodes we need to start are the **controller spwaners**.
 
 .. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
     :language: py
-    :lineno-start: 140
-    :lines: 140 - 149
+    :start-at: def spawn_controller(name, activate=True):
+    :end-before: return LaunchDescription(
     :linenos: 
     :caption: my_robot_cell_control/launch/start_robot.launch.py
 
@@ -100,16 +100,23 @@ Once we've determined which nodes we want to start, we can return the launch des
 
 .. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
     :language: py
-    :lineno-start: 151
-    :lines: 151 - 166
+    :start-at: return LaunchDescription(
     :linenos: 
     :caption: my_robot_cell_control/launch/start_robot.launch.py
 
 Remember that we haven't actually invoked the controller spawner node yet, so be sure to call the function for the ROS2 controllers you want to use.
+
+Before we can test our code, it's essential to build and source our Colcon workspace:
+
+.. code-block:: bash
+
+    #source and build your workspace
+    colcon build
+    source install/setup.bash
 
 We can start the driver by running:
 
 .. code-block:: bash
 
     #start the driver 
-    ros2 launch my_robot_cell_control start_robot.launch.py ur_type:=ur20 robot_ip:=192.168.56.101
+    ros2 launch my_robot_cell_control start_robot.launch.py robot_ip:=192.168.56.101

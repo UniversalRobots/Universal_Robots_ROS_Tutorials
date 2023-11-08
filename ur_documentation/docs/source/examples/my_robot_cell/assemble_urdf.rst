@@ -16,8 +16,8 @@ First, we'll have to **include** the macro to generate the robot arm:
 
 .. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
     :language: xml
-    :lineno-start: 4
-    :lines: 4
+    :start-at:   <xacro:include filename="$(find ur_description)/urdf/ur_macro.xacro"/>
+    :end-at:   <xacro:include filename="$(find ur_description)/urdf/ur_macro.xacro"/>
     :linenos:
     :caption: my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
 
@@ -27,8 +27,8 @@ Later, we will call the macro to create the arm. Therefore, we need to declare c
 
 .. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
     :language: xml
-    :lineno-start: 6
-    :lines: 6-14
+    :start-at:   <xacro:arg name="ur_type" default="ur20"/>
+    :end-at:   <xacro:arg name="ur_input_recipe_filename" default="$(find ur_robot_driver)/resources/rtde_output_recipe.txt"/>
     :linenos:
     :caption: my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
     
@@ -36,8 +36,8 @@ The following section contains all items within the workcell that are not part o
 
 .. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
     :language: xml
-    :lineno-start: 16
-    :lines: 16 - 78
+    :start-at:   <link name="world"/>
+    :end-before:   <link name="robot_mount"/>
     :linenos: 
     :caption: my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
 
@@ -47,8 +47,8 @@ The final step before generating the robot is to create its parent link.
 
 .. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
     :language: xml
-    :lineno-start: 80
-    :lines: 80 - 85
+    :start-at: <link name="robot_mount"/>
+    :end-before:   <xacro:ur_robot
     :linenos: 
     :caption: my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
 
@@ -56,12 +56,21 @@ After that we are finally able to actually **create the robot arm** by calling t
 
 .. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
     :language: xml
-    :lineno-start: 87
-    :lines: 87 - 100
+    :start-at:   <xacro:ur_robot
+    :end-at:   </xacro:ur_robot>
     :linenos: 
     :caption: my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
 
 Note that the **origin** argument is transmitted in a different manner than the other arguments.
+
+Before we can test our code, it's essential to build and source our Colcon workspace:
+
+.. code-block:: bash
+
+    #source and build your workspace
+    colcon build
+    source install/setup.bash
+
 
 We can view our custom workspace by running:
 

@@ -38,7 +38,7 @@ We can add the end effector planning group in the same way the tutorial recommen
 Since we've already determined which ROS 2 controllers we want to use to start the ``ur_robot_driver``, we don't need the Setup Assistant to generate a ros2_control.yaml file. Therefore, we can skip **Step 9: ROS 2 Controllers** and **Step 10: MoveIt Controllers** for now. 
 
 In **Step 12**, the Setup Assistant asks us to select which launch files we need. To maintain clarity, we should only generate those that are essential for our purpose.
-For our specific use case, we only need the **RViz Launch** and the **MoveGroup Launch**.
+For our specific use case, we only need the **RViz Launch**, **MoveGroup Launch** and the **setup assistant Launch**.
 
 After **Step 14**, where we generated the MoveIt Config, we need to manually assemble the ROS 2 and MoveIt controllers. To do this, we must create two .yaml files in the config directory of the package.
 One of these files is named ros2_controllers.yaml and should contain the same contents as the ros2_controllers file in the Launch package.
@@ -50,6 +50,14 @@ The second file, called moveit_controllers.yaml, specifies which controller Move
     :caption: my_robot_cell_moveit_config/config/moveit_controllers.yaml
 
 In our example MoveIt uses the scaled_joint_trajectory_controller.
+
+Before we can test our code, it's essential to build and source our Colcon workspace:
+
+.. code-block:: bash
+
+    #source and build your workspace
+    colcon build
+    source install/setup.bash
 
 With all that we can finally start trajectory planning. After we made sure that the ``ur_robot_driver`` is still running we can start MoveIt.
 We can start the move_group node by running the launch file the setup assitant created for us:
