@@ -79,7 +79,7 @@
   <joint name="base_to_robot_mount" type="fixed">
     <parent link="table"/>
     <child link="robot_mount"/>
-    <origin xyz="0.845 0.9 0" rpy="0 0 0" />
+    <origin xyz="0.845 0.85 0" rpy="0 0 ${pi}" />
   </joint>
   
   <xacro:ur_robot
@@ -95,7 +95,7 @@
     output_recipe_filename="$(arg ur_output_recipe_filename)"
     input_recipe_filename="$(arg ur_input_recipe_filename)"
   >
-    <origin xyz="0 -0.05 0" rpy="0 0 ${pi}" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
   </xacro:ur_robot>
 
 </robot>
