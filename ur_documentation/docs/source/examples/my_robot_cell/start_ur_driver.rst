@@ -110,6 +110,9 @@ Before we can test our code, it's essential to build and source our Colcon works
 
 .. code-block:: bash
 
+    #cd to your colcon workspace root
+    cd ~/colcon_ws
+
     #source and build your workspace
     colcon build
     source install/setup.bash

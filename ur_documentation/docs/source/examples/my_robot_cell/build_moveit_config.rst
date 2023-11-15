@@ -40,9 +40,8 @@ Since we've already determined which ROS 2 controllers we want to use to start t
 In **Step 12**, the Setup Assistant asks us to select which launch files we need. To maintain clarity, we should only generate those that are essential for our purpose.
 For our specific use case, we only need the **RViz Launch**, **MoveGroup Launch** and the **setup assistant Launch**.
 
-After **Step 14**, where we generated the MoveIt Config, we need to manually assemble the ROS 2 and MoveIt controllers. To do this, we must create two .yaml files in the config directory of the package.
-One of these files is named ros2_controllers.yaml and should contain the same contents as the ros2_controllers file in the Launch package.
-The second file, called moveit_controllers.yaml, specifies which controller MoveIt uses for its trajectory planning and could look something like this:
+After **Step 14**, where we generated the MoveIt Config, we need to manually assemble the MoveIt controllers. To do this, we must create a .yaml file called "moveit_controllers.yaml" in the config directory of the package.
+The file specifies which controller MoveIt uses for its trajectory planning and could look something like this:
 
 .. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_moveit_config/config/moveit_controllers.yaml
     :language: yaml
@@ -54,6 +53,9 @@ In our example MoveIt uses the scaled_joint_trajectory_controller.
 Before we can test our code, it's essential to build and source our Colcon workspace:
 
 .. code-block:: bash
+
+    #cd to your colcon workspace root
+    cd ~/colcon_ws
 
     #source and build your workspace
     colcon build
