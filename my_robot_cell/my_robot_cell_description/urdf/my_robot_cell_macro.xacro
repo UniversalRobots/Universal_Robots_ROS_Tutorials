@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="my_robot_cell">
+    <link name="world"/>
+    <joint name="table_to_world" type="fixed">
+      <parent link="world"/>
+      <child link="table"/>
+      <origin xyz="0 0 1"/>
+    </joint>
+
+    <link name="table">
+      <visual>
+        <geometry>
+          <mesh filename="package://my_robot_cell_description/meshes/fzi_table.dae"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0.75 0.5 -1"/>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://my_robot_cell_description/meshes/fzi_table.dae"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0.75 0.5 -1"/>
+      </collision>
+    </link>
+
+    <link name="monitor">
+      <visual>
+        <geometry>
+          <mesh filename="package://my_robot_cell_description/meshes/171005_Motek_Monitor_L.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://my_robot_cell_description/meshes/171005_Motek_Monitor_L.dae"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint name="base_to_monitor" type="fixed">
+      <parent link="table"/>
+      <child link="monitor"/>
+      <origin xyz="0.2 0.6 0"/>
+    </joint>
+
+    <material name="white">
+      <color rgba="1 1 1 1"/>
+    </material>
+
+    <link name="wall">
+      <visual>
+        <geometry>
+          <mesh filename="package://my_robot_cell_description/meshes/wall.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="4.44 0.1 2.5"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint name="base_to_wall" type="fixed">
+      <parent link="table"/>
+      <child link="wall"/>
+      <origin xyz="1.25 1.5 0.5"/>
+    </joint>
+
+    <link name="robot_mount"/>
+    <joint name="base_to_robot_mount" type="fixed">
+      <parent link="table"/>
+      <child link="robot_mount"/>
+      <origin xyz="0.845 0.85 0" rpy="0 0 ${pi}" />
+    </joint>
+  </xacro:macro>
+
+</robot>
