@@ -11,7 +11,9 @@ def generate_launch_description():
     update_rate_config_file = PathJoinSubstitution([control_package, "config", "update_rate.yaml"])
     controllers_file = PathJoinSubstitution([control_package, "config", "ros2_controllers.yaml"])
     robot_calibration_file= PathJoinSubstitution([control_package, "config", "my_robot_calibration.yaml"])
-    description_file = PathJoinSubstitution([control_package, "urdf", "my_robot_cell_control.urdf.xacro"])
+
+    description_package = FindPackageShare("my_robot_cell_description")
+    description_file = PathJoinSubstitution([description_package, "urdf", "my_robot_cell.urdf.xacro"])
 
     ur_description_package = FindPackageShare("ur_description")
     joint_limits_file = PathJoinSubstitution([ur_description_package, "config", "ur20", "joint_limits.yaml"])
@@ -122,7 +124,7 @@ def generate_launch_description():
         output="screen",
         parameters=[robot_description],
     )
-    
+
     def spawn_controller(name, activate=True):
         inactive_flag = ["--inactive"] if not activate else []
         return Node(
