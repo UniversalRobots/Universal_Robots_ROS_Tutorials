@@ -2,6 +2,43 @@
 Start the ur_robot_driver
 =========================
 
+Before starting the ``ur_robot_driver``, it is necessary to add a **ros2_control** tag to our URDF. Luckily, the ``ur_robot_driver`` already provides us with a macro for that. We can simply include the macro in our assembled URDF.
+
+.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/urdf/my_robot_cell_control.urdf.xacro
+    :language: py
+    :linenos:
+    :caption: my_robot_cell_control/urdf/my_robot_cell_control.urdf.xacro
+
+This URDF is very similar to the one we have already assembled. We simply need to include the ros2_control macro, 
+
+.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/urdf/my_robot_cell_control.urdf.xacro
+    :language: py
+    :start-at:   <xacro:include filename="$(find ur_robot_driver)/urdf/ur.ros2_control.xacro"/>
+    :end-at:   <xacro:include filename="$(find ur_robot_driver)/urdf/ur.ros2_control.xacro"/>
+    :linenos: 
+    :caption: my_robot_cell_control/urdf/my_robot_cell_control.urdf.xacro
+
+
+define the necessary arguments that need to be passed to the macro,
+
+.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/urdf/my_robot_cell_control.urdf.xacro
+    :language: py
+    :start-at:     <xacro:arg name="robot_ip" default="0.0.0.0"/>
+    :end-at:   <xacro:my_robot_cell/>
+    :linenos: 
+    :caption: my_robot_cell_control/urdf/my_robot_cell_control.urdf.xacro
+
+
+and then call the macro by providing all the specified arguments.
+
+.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/urdf/my_robot_cell_control.urdf.xacro
+    :language: py
+    :start-at:    <xacro:ur_ros2_control
+    :end-at:   </robot>
+    :linenos: 
+    :caption: my_robot_cell_control/urdf/my_robot_cell_control.urdf.xacro
+
+
 Now that everything is in place, we can proceed to start up a driver instance. To initialize the ``ur_robot_driver`` using our customized workcell description, we need to create a launch file.
 
 .. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
