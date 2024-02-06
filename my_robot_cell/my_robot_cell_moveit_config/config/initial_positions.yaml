@@ -1,0 +1,9 @@
+# Default initial positions for my_robot_cell's ros2_control fake system
+
+initial_positions:
+  ur20_elbow_joint: 0
+  ur20_shoulder_lift_joint: 0
+  ur20_shoulder_pan_joint: 0
+  ur20_wrist_1_joint: 0
+  ur20_wrist_2_joint: 0
+  ur20_wrist_3_joint: 0

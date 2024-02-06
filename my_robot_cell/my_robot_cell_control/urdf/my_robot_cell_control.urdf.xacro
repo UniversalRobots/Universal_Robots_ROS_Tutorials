@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<robot name="my_robot_cell" xmlns:xacro="http://ros.org/wiki/xacro">
+  
+  <xacro:include filename="$(find ur_description)/urdf/ur_macro.xacro"/>
+  <xacro:include filename="$(find my_robot_cell_description)/urdf/my_robot_cell_macro.xacro"/>
+  <xacro:include filename="$(find ur_robot_driver)/urdf/ur.ros2_control.xacro"/>
+
+  <xacro:arg name="ur_type" default="ur20"/>
+  <xacro:arg name="joint_limit_params" default="$(find ur_description)/config/$(arg ur_type)/joint_limits.yaml"/>
+  <xacro:arg name="kinematics_params" default="$(find ur_description)/config/$(arg ur_type)/default_kinematics.yaml"/>
+  <xacro:arg name="physical_params" default="$(find ur_description)/config/$(arg ur_type)/physical_parameters.yaml"/>
+  <xacro:arg name="visual_params" default="$(find ur_description)/config/$(arg ur_type)/visual_parameters.yaml"/>
+
+  <xacro:arg name="robot_ip" default="0.0.0.0"/>
+  <xacro:arg name="ur_script_filename" default="$(find ur_client_library)/resources/external_control.urscript"/>
+  <xacro:arg name="ur_output_recipe_filename" default="$(find ur_robot_driver)/resources/rtde_input_recipe.txt"/>
+  <xacro:arg name="ur_input_recipe_filename" default="$(find ur_robot_driver)/resources/rtde_output_recipe.txt"/>
+      
+  <xacro:my_robot_cell/>
+
+  <xacro:ur_robot
+    name="$(arg ur_type)"
+    tf_prefix="$(arg ur_type)_"
+    parent="robot_mount"
+    joint_limits_parameters_file="$(arg joint_limit_params)"
+    kinematics_parameters_file="$(arg kinematics_params)"
+    physical_parameters_file="$(arg physical_params)"
+    visual_parameters_file="$(arg visual_params)"
+  >
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:ur_robot>
+  
+  <xacro:ur_ros2_control
+    name="$(arg ur_type)"
+    tf_prefix="$(arg ur_type)_"
+    kinematics_parameters_file="$(arg kinematics_params)"
+    robot_ip="$(arg robot_ip)"
+    script_filename="$(arg ur_script_filename)"
+    output_recipe_filename="$(arg ur_output_recipe_filename)"
+    input_recipe_filename="$(arg ur_input_recipe_filename)"
+  />
+
+</robot>
