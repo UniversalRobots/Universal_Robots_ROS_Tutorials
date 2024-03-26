@@ -38,6 +38,7 @@
       <arg name="reverse_port" value="$(arg alice_reverse_port)"/>
       <arg name="script_sender_port" value="$(arg alice_script_sender_port)"/>
       <arg name="trajectory_port" value="$(arg alice_trajectory_port)"/>
+      <arg name="script_command_port" value="$(arg alice_script_command_port)"/>
       <arg name="kinematics_config" value="$(arg alice_kinematics)"/>
       <arg name="tf_prefix" value="alice_"/>
       <arg name="controllers" value="$(arg controllers)"/>
@@ -55,6 +56,7 @@
       <arg name="reverse_port" value="$(arg bob_reverse_port)"/>
       <arg name="script_sender_port" value="$(arg bob_script_sender_port)"/>
       <arg name="trajectory_port" value="$(arg bob_trajectory_port)"/>
+      <arg name="script_command_port" value="$(arg bob_script_command_port)"/>
       <arg name="kinematics_config" value="$(arg bob_kinematics)"/>
       <arg name="tf_prefix" value="bob_"/>
       <arg name="controllers" value="$(arg controllers)"/>
