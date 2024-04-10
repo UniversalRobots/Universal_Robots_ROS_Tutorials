@@ -17,5 +17,3 @@ moveit_simple_controller_manager:
       - ur20_wrist_1_joint
       - ur20_wrist_2_joint
       - ur20_wrist_3_joint
-    action_ns: follow_joint_trajectory
-    default: true

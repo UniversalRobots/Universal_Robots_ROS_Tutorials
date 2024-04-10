@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "ur_documentation"
-copyright = "2022, Universal Robots A/S"
+copyright = "2024, Universal Robots A/S"
 author = "Felix Exner"
 
 # The short X.Y version

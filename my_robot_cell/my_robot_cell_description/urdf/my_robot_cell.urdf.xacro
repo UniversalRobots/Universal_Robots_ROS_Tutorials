@@ -1,27 +1,25 @@
 <?xml version="1.0"?>
 <robot name="my_robot_cell" xmlns:xacro="http://ros.org/wiki/xacro">
-  
-  <xacro:include filename="$(find ur_description)/urdf/ur_macro.xacro"/>
+
   <xacro:include filename="$(find my_robot_cell_description)/urdf/my_robot_cell_macro.xacro"/>
 
   <xacro:arg name="ur_type" default="ur20"/>
-  <xacro:arg name="joint_limit_params" default="$(find ur_description)/config/$(arg ur_type)/joint_limits.yaml"/>
-  <xacro:arg name="kinematics_params" default="$(find ur_description)/config/$(arg ur_type)/default_kinematics.yaml"/>
-  <xacro:arg name="physical_params" default="$(find ur_description)/config/$(arg ur_type)/physical_parameters.yaml"/>
-  <xacro:arg name="visual_params" default="$(find ur_description)/config/$(arg ur_type)/visual_parameters.yaml"/>
-      
-  <xacro:my_robot_cell/>
+  <xacro:arg name="joint_limits_parameters_file" default="$(find ur_description)/config/$(arg ur_type)/joint_limits.yaml"/>
+  <xacro:arg name="kinematics_parameters_file" default="$(find ur_description)/config/$(arg ur_type)/default_kinematics.yaml"/>
+  <xacro:arg name="physical_parameters_file" default="$(find ur_description)/config/$(arg ur_type)/physical_parameters.yaml"/>
+  <xacro:arg name="visual_parameters_file" default="$(find ur_description)/config/$(arg ur_type)/visual_parameters.yaml"/>
 
-  <xacro:ur_robot
-    name="$(arg ur_type)"
-    tf_prefix="$(arg ur_type)_"
-    parent="robot_mount"
-    joint_limits_parameters_file="$(arg joint_limit_params)"
-    kinematics_parameters_file="$(arg kinematics_params)"
-    physical_parameters_file="$(arg physical_params)"
-    visual_parameters_file="$(arg visual_params)"
-  >
-    <origin xyz="0 0 0" rpy="0 0 0" />
-  </xacro:ur_robot>
+  <link name="world"/>
+  <!--This will create the scene where the robot is located in-->
+  <xacro:my_robot_cell
+    parent="world"
+    ur_type="$(arg ur_type)"
+    joint_limits_parameters_file="$(arg joint_limits_parameters_file)"
+    kinematics_parameters_file="$(arg kinematics_parameters_file)"
+    physical_parameters_file="$(arg physical_parameters_file)"
+    visual_parameters_file="$(arg visual_parameters_file)"
+    >
+      <origin xyz="0 0 1" rpy="0 0 0" />
+  </xacro:my_robot_cell>
 
 </robot>

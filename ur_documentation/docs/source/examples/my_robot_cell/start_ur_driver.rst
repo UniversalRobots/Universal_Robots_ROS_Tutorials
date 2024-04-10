@@ -2,161 +2,129 @@
 Start the ur_robot_driver
 =========================
 
-Before starting the ``ur_robot_driver``, it is necessary to add a **ros2_control** tag to our URDF. Luckily, the ``ur_robot_driver`` already provides us with a macro for that. We can simply include the macro in our assembled URDF.
+In the last chapter we created a custom scene description containing our robot. In order to make
+that description usable to ``ros2_control`` and hence the ``ur_robot_driver``, we need to add
+control information. We will also add a custom launchfile to startup our demonstrator.
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/urdf/my_robot_cell_control.urdf.xacro
-    :language: py
+We will generate a new package called ``my_robot_cell_control`` for that purpose.
+
+
+Create a description with ros2_control tag
+------------------------------------------
+
+The first step is to create a description containing the control instructions:
+
+.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/urdf/my_robot_cell_controlled.urdf.xacro
+    :language: xml
     :linenos:
-    :caption: my_robot_cell_control/urdf/my_robot_cell_control.urdf.xacro
+    :caption: my_robot_cell_control/urdf/my_robot_cell_controlled.urdf.xacro
 
-This URDF is very similar to the one we have already assembled. We simply need to include the ros2_control macro, 
+This URDF is very similar to the one we have already assembled. We simply need to include the ros2_control macro,
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/urdf/my_robot_cell_control.urdf.xacro
-    :language: py
+.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/urdf/my_robot_cell_controlled.urdf.xacro
+    :language: xml
     :start-at:   <xacro:include filename="$(find ur_robot_driver)/urdf/ur.ros2_control.xacro"/>
     :end-at:   <xacro:include filename="$(find ur_robot_driver)/urdf/ur.ros2_control.xacro"/>
-    :linenos: 
-    :caption: my_robot_cell_control/urdf/my_robot_cell_control.urdf.xacro
+    :caption: my_robot_cell_control/urdf/my_robot_cell_controlled.urdf.xacro
 
 
 define the necessary arguments that need to be passed to the macro,
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/urdf/my_robot_cell_control.urdf.xacro
-    :language: py
-    :start-at:     <xacro:arg name="robot_ip" default="0.0.0.0"/>
-    :end-at:   <xacro:my_robot_cell/>
-    :linenos: 
-    :caption: my_robot_cell_control/urdf/my_robot_cell_control.urdf.xacro
+.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/urdf/my_robot_cell_controlled.urdf.xacro
+    :language: xml
+    :start-at: <xacro:arg name="robot_ip" default="0.0.0.0"/>
+    :end-at: <xacro:arg name="mock_sensor_commands" default="false" />
+    :caption: my_robot_cell_control/urdf/my_robot_cell_controlled.urdf.xacro
 
 
 and then call the macro by providing all the specified arguments.
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/urdf/my_robot_cell_control.urdf.xacro
-    :language: py
+.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/urdf/my_robot_cell_controlled.urdf.xacro
+    :language: xml
     :start-at:    <xacro:ur_ros2_control
-    :end-at:   </robot>
-    :linenos: 
-    :caption: my_robot_cell_control/urdf/my_robot_cell_control.urdf.xacro
+    :end-at:   />
+    :caption: my_robot_cell_control/urdf/my_robot_cell_controlled.urdf.xacro
+
+Extract the calibration
+-----------------------
+
+One very important step is to extract the robot's specific calibration and save it to our
+workcell's startup package. For details, please refer to `our documentation on extracting the calibration information <https://docs.ros.org/en/ros2_packages/rolling/api/ur_robot_driver/installation/robot_setup.html#extract-calibration-information>`_.
+For now, we just copy the default one for the ur20.
+
+.. code-block::
+
+   cp $(ros2 pkg prefix ur_description)/share/ur_description/config/ur20/default_kinematics.yaml \
+     my_robot_cell_control/config/my_robot_calibration.yaml
 
 
-Now that everything is in place, we can proceed to start up a driver instance. To initialize the ``ur_robot_driver`` using our customized workcell description, we need to create a launch file.
+Create robot_state_publisher launchfile
+---------------------------------------
+
+To use the custom controlled description, we need to generate a launchfile loading that description
+(Since it contains less / potentially different) arguments than the "default" one. In that
+launchfile we need to start a ``robot_state_publisher`` (RSP) node that will get the description as a
+parameter and redistribute it via the ``robot_description`` topic:
+
+.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/rsp.launch.py
+    :language: py
+    :start-after: # Author: Felix Exner
+    :linenos:
+    :caption: my_robot_cell_control/launch/rsp.launch.py
+
+With this we could start our workcell using
+
+.. code-block:: bash
+
+    ros2 launch ur_robot_driver ur_control.launch.py \
+      description_launchfile:=$(ros2 pkg prefix my_robot_cell_control)/share/my_robot_cell_control/launch/rsp.launch.py \
+      use_mock_hardware:=true \
+      robot_ip:=123 \ # irrelevant since we use mock hardware
+      ur_type:=ur20 \
+      tf_prefix:=ur20_
+
+Create start_robot launchfile
+-----------------------------
+
+Since the command above is obviously not very convenient to start our robot, we wrap that into another
+launchfile that includes the ``ur_control.launch.py`` launchfile with the correct description
+launchfile and prefix:
 
 .. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
     :language: py
     :linenos:
     :caption: my_robot_cell_control/launch/start_robot.launch.py
 
-Let's break it down:
+With that we can start the robot using
 
-First we have to assemble all relevant files.
+.. code-block:: bash
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
-    :language: py
-    :start-at: def generate_launch_description():
-    :end-at: ur_output_recipe_filename = PathJoinSubstitution([ur_robot_driver_package, "resources", "rtde_output_recipe.txt"])
-    :linenos: 
-    :caption: my_robot_cell_control/launch/start_robot.launch.py
+   ros2 launch my_robot_cell_control start_robot.launch.py use_mock_hardware:=true
 
-If you are not familiar with extracting the calibration information of your UR robot and saving it in a .yaml file, please consider reading the relevant documentation on `extracting the calibration information <https://docs.ros.org/en/ros2_packages/rolling/api/ur_robot_driver/installation/robot_setup.html#extract-calibration-information>`_ .
-
-Next, we need to define all the arguments that we intend to pass through the shell.
-
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
-    :language: py
-    :start-at: arg_robot_ip = DeclareLaunchArgument(
-    :end-before: robot_description_content = Command(
-    :linenos: 
-    :caption: my_robot_cell_control/launch/start_robot.launch.py
-
-Here for example we have chosen not to hardcode the robot's IP address. Therefore, we won't need to modify the launch file if the robot becomes accessible through a different IP.
-
-In the next step we need to load our `custom urdf <file:///disk/users/cg247/tut/ur_documentation/docs/build/html/examples/custom_workspace/assemble_urdf.html>`_ with all required arguments. 
-
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
-    :language: py
-    :start-at: robot_description_content = Command(
-    :end-at: robot_description = {"robot_description": robot_description_content}
-    :linenos: 
-    :caption: my_robot_cell_control/launch/start_robot.launch.py
-
-In the following parts we need to create all **relevant Nodes** to get the driver started.
-
-We should begin by creating the **control node**, which requires our URDF, the update rate, and the ROS2 controllers file as parameters.
-
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
-    :language: py
-    :start-at: control_node = Node(
-    :end-before: controller_stopper_node = Node(
-    :linenos: 
-    :caption: my_robot_cell_control/launch/start_robot.launch.py
-
-
-It's also a good idea to start the **controller stopper** node, which can stop and restart the ROS2 controllers as needed. 
-To function properly, we should specify the **consistent controllers** that must run continuously and should not be stopped by this node.
-
-
-
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
-    :language: py
-    :start-at: controller_stopper_node = Node(
-    :end-before: dashboard_client_node = Node(
-    :linenos: 
-    :caption: my_robot_cell_control/launch/start_robot.launch.py
-
-
-The **dashboard node** needs the robot ip to be started. 
-
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
-    :language: py
-    :start-at: dashboard_client_node = Node(
-    :end-before: robot_state_publisher = Node(
-    :linenos: 
-    :caption: my_robot_cell_control/launch/start_robot.launch.py
-
-The **robot state publisher** needs the urdf to be started.
-
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
-    :language: py
-    :start-at: robot_state_publisher = Node(
-    :end-before: def spawn_controller(name, activate=True):
-    :linenos: 
-    :caption: my_robot_cell_control/launch/start_robot.launch.py
-
-The last nodes we need to start are the **controller spwaners**.
-
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
-    :language: py
-    :start-at: def spawn_controller(name, activate=True):
-    :end-before: return LaunchDescription(
-    :linenos: 
-    :caption: my_robot_cell_control/launch/start_robot.launch.py
-
-This is a small usefull function to **spawn a controller** and set an inactive flag if needed.
-
-Once we've determined which nodes we want to start, we can return the launch description with all arguments and nodes.
-
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
-    :language: py
-    :start-at: return LaunchDescription(
-    :linenos: 
-    :caption: my_robot_cell_control/launch/start_robot.launch.py
-
-Remember that we haven't actually invoked the controller spawner node yet, so be sure to call the function for the ROS2 controllers you want to use.
+Testing everything
+------------------
 
 Before we can test our code, it's essential to build and source our Colcon workspace:
 
 .. code-block:: bash
 
-    #cd to your colcon workspace root
+    #cd to your colcon workspace root, e.g.
     cd ~/colcon_ws
 
     #source and build your workspace
     colcon build
     source install/setup.bash
 
-We can start the driver by running:
+We can start the system in a mocked simulation
 
 .. code-block:: bash
 
-    #start the driver 
-    ros2 launch my_robot_cell_control start_robot.launch.py robot_ip:=192.168.56.101
+    #start the driver with mocked hardware
+    ros2 launch my_robot_cell_control start_robot.launch.py use_mock_hardware:=true
+
+Or to use it with a real robot:
+
+.. code-block:: bash
+
+    #start the driver with real hardware
+    ros2 launch my_robot_cell_control start_robot.launch.py

@@ -2,13 +2,12 @@ moveit_setup_assistant_config:
   urdf:
     package: my_robot_cell_description
     relative_path: urdf/my_robot_cell.urdf.xacro
-    xacro_args: ur_type:=ur20
   srdf:
     relative_path: config/my_robot_cell.srdf
   package_settings:
-    author_name: Felix Druchdewald
-    author_email: Durchdewald@fzi.de
-    generated_timestamp: 1705505903
+    author_name: Felix Exner
+    author_email: exner@fzi.de
+    generated_timestamp: 1713785068
   control_xacro:
     command:
       - position
