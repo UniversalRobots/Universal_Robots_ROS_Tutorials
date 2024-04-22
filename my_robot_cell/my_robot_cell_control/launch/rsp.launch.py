@@ -58,10 +58,13 @@ def generate_launch_description():
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
-            PathJoinSubstitution([
-                FindPackageShare("my_robot_cell_control"),
-                                 "urdf",
-                                 "my_robot_cell_controlled.urdf.xacro"]),
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("my_robot_cell_control"),
+                    "urdf",
+                    "my_robot_cell_controlled.urdf.xacro",
+                ]
+            ),
             " ",
             "robot_ip:=",
             robot_ip,
@@ -113,12 +116,12 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "kinematics_parameters_file",
             default_value=PathJoinSubstitution(
-        [
-            FindPackageShare("my_robot_cell_control"),
-            "config",
-            "my_robot_calibration.yaml",
-        ]
-    ),
+                [
+                    FindPackageShare("my_robot_cell_control"),
+                    "config",
+                    "my_robot_calibration.yaml",
+                ]
+            ),
             description="The calibration configuration of the actual robot used.",
         )
     )

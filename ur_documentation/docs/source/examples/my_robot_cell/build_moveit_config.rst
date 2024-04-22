@@ -31,7 +31,7 @@ joints are in the 0 position. Hence, the collision is allowed as "Collision by d
 that tick, since we don't want that collision to be ignored.
 
 .. image:: self_collisions.png
-   :alt: Adjust self-collisions - Remove the tick for the collsion between monitor and ur20_upper_arm_link.
+   :alt: Adjust self-collisions - Remove the tick for the collision between monitor and ur20_upper_arm_link.
 
 
 We skip adding virtual joints for now and continue with our **planning group(s)**.
