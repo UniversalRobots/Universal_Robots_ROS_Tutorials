@@ -6,7 +6,17 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: ammaraskar/sphinx-action@master
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          docs-folder: "./ur_documentation/docs"
+          python-version: '3.10'
+          cache: 'pip'
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade --requirement ur_documentation/requirements.txt
+        shell: bash
+      - name: Build documentation using sphinx
+        run: |
+          TZ=UTC sphinx-build ur_documentation/docs/source _build
