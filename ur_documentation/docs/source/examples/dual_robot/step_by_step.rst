@@ -20,7 +20,7 @@ In order to create a multi-robot workcell we basically have to consider three as
 Assembling the URDF
 -------------------
 
-The ur_description_ package provides `macro files <https://github.com/ros-industrial/universal_robot/blob/melodic-devel-staging/ur_description/urdf/inc/ur5e_macro.xacro>`_ to generate an instance of a Universal Robots arm. We'll use this to assemble a description containing a Box with a UR3e and a UR10e ontop:
+The ur_description_ package provides `macro files <https://github.com/ros-industrial/universal_robot/blob/noetic-devel/ur_description/urdf/inc/ur5e_macro.xacro>`_ to generate an instance of a Universal Robots arm. We'll use this to assemble a description containing a Box with a UR3e and a UR10e ontop:
 
 .. literalinclude:: ../../../../../ur_example_dual_robot/urdf/dual_robot.xacro
    :language: xml
@@ -212,5 +212,5 @@ Bonus: Use correct robot calibration with dual_robot setup
 ----------------------------------------------------------
 
 
-.. _ur_description: https://github.com/ros-industrial/universal_robot/tree/melodic-devel-staging/ur_description
+.. _ur_description: https://github.com/ros-industrial/universal_robot/tree/noetic-devel/ur_description
 .. _joint_state_publisher: http://wiki.ros.org/joint_state_publisher#Subscribing_JointState_messages

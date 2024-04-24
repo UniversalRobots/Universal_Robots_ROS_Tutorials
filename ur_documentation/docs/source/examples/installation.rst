@@ -14,8 +14,6 @@ First, create a catkin_workspace, clone the repositories and build them:
    mkdir -p catkin_ws/src && cd catkin_ws
 
    # clone all necessary repositories
-   git clone https://github.com/UniversalRobots/Universal_Robots_ROS_Driver.git
-   git clone -b melodic-devel-staging https://github.com/ros-industrial/universal_robot.git
    git clone https://github.com/UniversalRobots/Universal_Robots_ROS_Tutorials.git
 
    # install dependencies
