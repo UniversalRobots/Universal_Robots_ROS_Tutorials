@@ -9,5 +9,4 @@ Those examples explain certain use cases in which the `ur_robot_driver <http://w
 
 .. toctree::
 
-   installation
-   dual_robot
+   my_robot_cell/toc
