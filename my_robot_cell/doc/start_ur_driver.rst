@@ -14,14 +14,14 @@ Create a description with ros2_control tag
 
 The first step is to create a description containing the control instructions:
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/urdf/my_robot_cell_controlled.urdf.xacro
+.. literalinclude:: ../my_robot_cell_control/urdf/my_robot_cell_controlled.urdf.xacro
     :language: xml
     :linenos:
     :caption: my_robot_cell_control/urdf/my_robot_cell_controlled.urdf.xacro
 
 This URDF is very similar to the one we have already assembled. We simply need to include the ros2_control macro,
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/urdf/my_robot_cell_controlled.urdf.xacro
+.. literalinclude:: ../my_robot_cell_control/urdf/my_robot_cell_controlled.urdf.xacro
     :language: xml
     :start-at:   <xacro:include filename="$(find ur_robot_driver)/urdf/ur.ros2_control.xacro"/>
     :end-at:   <xacro:include filename="$(find ur_robot_driver)/urdf/ur.ros2_control.xacro"/>
@@ -30,7 +30,7 @@ This URDF is very similar to the one we have already assembled. We simply need t
 
 define the necessary arguments that need to be passed to the macro,
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/urdf/my_robot_cell_controlled.urdf.xacro
+.. literalinclude:: ../my_robot_cell_control/urdf/my_robot_cell_controlled.urdf.xacro
     :language: xml
     :start-at: <xacro:arg name="robot_ip" default="0.0.0.0"/>
     :end-at: <xacro:arg name="mock_sensor_commands" default="false" />
@@ -39,7 +39,7 @@ define the necessary arguments that need to be passed to the macro,
 
 and then call the macro by providing all the specified arguments.
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/urdf/my_robot_cell_controlled.urdf.xacro
+.. literalinclude:: ../my_robot_cell_control/urdf/my_robot_cell_controlled.urdf.xacro
     :language: xml
     :start-at:    <xacro:ur_ros2_control
     :end-at:   />
@@ -66,7 +66,7 @@ To use the custom controlled description, we need to generate a launchfile loadi
 launchfile we need to start a ``robot_state_publisher`` (RSP) node that will get the description as a
 parameter and redistribute it via the ``robot_description`` topic:
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/rsp.launch.py
+.. literalinclude:: ../my_robot_cell_control/launch/rsp.launch.py
     :language: py
     :start-after: # Author: Felix Exner
     :linenos:
@@ -90,7 +90,7 @@ Since the command above is obviously not very convenient to start our robot, we 
 launchfile that includes the ``ur_control.launch.py`` launchfile with the correct description
 launchfile and prefix:
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_control/launch/start_robot.launch.py
+.. literalinclude:: ../my_robot_cell_control/launch/start_robot.launch.py
     :language: py
     :linenos:
     :caption: my_robot_cell_control/launch/start_robot.launch.py

@@ -7,7 +7,7 @@ We'll use this to create a custom workcell with a ur20 inside:
 Workcell description
 --------------------
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
+.. literalinclude:: ../my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
     :language: xml
     :linenos:
     :caption: my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
@@ -16,7 +16,7 @@ Let's break it down:
 
 First, we'll have to **include** the macro to generate our custom workcell:
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
+.. literalinclude:: ../my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
     :language: xml
     :start-at:   <xacro:include filename="$(find my_robot_cell_description)/urdf/my_robot_cell_macro.xacro"/>
     :end-at:   <xacro:include filename="$(find my_robot_cell_description)/urdf/my_robot_cell_macro.xacro"/>
@@ -27,7 +27,7 @@ This line only loadeded the macro for generating the robot workcell.
 We will need to provide some parameters to our workcell in order to parametrize the arm. Therefore,
 we need to declare certain arguments that must be passed to the macro.
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
+.. literalinclude:: ../my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
     :language: xml
     :start-at:   <xacro:arg name="ur_type" default="ur20"/>
     :end-at:     <xacro:arg name="visual_parameters_file" default="$(find ur_description)/config/$(arg ur_type)/visual_parameters.yaml"/>
@@ -38,7 +38,7 @@ experienced in writing URDFs, you may want to refer to this  `tutorial
 <https://docs.ros.org/en/rolling/Tutorials/Intermediate/URDF/URDF-Main.html>`_. The macro's content
 is generated using
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
+.. literalinclude:: ../my_robot_cell_description/urdf/my_robot_cell.urdf.xacro
     :language: xml
     :start-at:     <link name="world"/>
     :end-at:       </xacro:my_robot_cell>
@@ -51,7 +51,7 @@ Workcell macro
 
 The workcell macro is defined in the following manner:
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_description/urdf/my_robot_cell_macro.xacro
+.. literalinclude:: ../my_robot_cell_description/urdf/my_robot_cell_macro.xacro
     :language: xml
     :linenos:
     :caption: my_robot_cell_description/urdf/my_robot_cell_macro.urdf.xacro
@@ -64,7 +64,7 @@ this instance, our workspace comprises a table in front of a wall, featuring a m
 Ensure that your custom workcell includes the parent link, which must be passed to the **ur_robot**
 macro. In this example, we chose to create a link named **robot_mount**.
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_description/urdf/my_robot_cell_macro.xacro
+.. literalinclude:: ../my_robot_cell_description/urdf/my_robot_cell_macro.xacro
     :language: xml
     :start-at: <link name="robot_mount"/>
     :end-at: </joint>
@@ -73,7 +73,7 @@ macro. In this example, we chose to create a link named **robot_mount**.
 
 After that we are finally able to actually **create the robot arm** by calling the macro.
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_description/urdf/my_robot_cell_macro.xacro
+.. literalinclude:: ../my_robot_cell_description/urdf/my_robot_cell_macro.xacro
     :language: xml
     :start-at:   <xacro:ur_robot
     :end-at:   </xacro:ur_robot>

@@ -91,7 +91,7 @@ conservative value. Higher values might lead to unwanted slowdowns during execut
 protective stops, while lower values will result in slower motions due to slow ramp-up and
 ramp-down parts of the trajectory.
 
-.. literalinclude:: ../../../../../my_robot_cell/my_robot_cell_moveit_config/config/joint_limits.yaml
+.. literalinclude:: ../my_robot_cell_moveit_config/config/joint_limits.yaml
    :language: yaml
    :linenos:
    :caption: my_robot_cell_moveit_config/config/joint_limits.yaml
