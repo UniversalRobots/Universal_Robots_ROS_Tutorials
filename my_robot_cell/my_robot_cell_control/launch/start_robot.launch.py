@@ -5,6 +5,7 @@ from launch_ros.substitutions import FindPackageShare
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.conditions import IfCondition
 from launch.substitutions import (
     Command,
     FindExecutable,
@@ -17,6 +18,9 @@ from launch.substitutions import (
 def generate_launch_description():
     ur_type = LaunchConfiguration("ur_type")
     robot_ip = LaunchConfiguration("robot_ip")
+    launch_rviz = LaunchConfiguration("launch_rviz")
+    description_package = FindPackageShare("my_robot_cell_description")
+    rvizconfig_file = PathJoinSubstitution([description_package, "rviz", "urdf.rviz"])
     declared_arguments = []
     declared_arguments.append(
         DeclareLaunchArgument(
@@ -43,10 +47,21 @@ def generate_launch_description():
             description="IP address by which the robot can be reached.",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument("launch_rviz", default_value="true", description="Launch RViz?")
+    )
 
     return LaunchDescription(
         declared_arguments
         + [
+            Node(
+                package="rviz2",
+                condition=IfCondition(launch_rviz),
+                executable="rviz2",
+                name="rviz2",
+                output="log",
+                arguments=["-d", rvizconfig_file],
+            ),
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(
                     [
@@ -63,6 +78,7 @@ def generate_launch_description():
                     "ur_type": ur_type,
                     "robot_ip": robot_ip,
                     "tf_prefix": [LaunchConfiguration("ur_type"), "_"],
+                    "launch_rviz": "false",
                     "description_launchfile": PathJoinSubstitution(
                         [
                             FindPackageShare("my_robot_cell_control"),
@@ -71,6 +87,6 @@ def generate_launch_description():
                         ]
                     ),
                 }.items(),
-            )
+            ),
         ]
     )
