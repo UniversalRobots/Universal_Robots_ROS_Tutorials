@@ -18,9 +18,6 @@ from launch.substitutions import (
 def generate_launch_description():
     ur_type = LaunchConfiguration("ur_type")
     robot_ip = LaunchConfiguration("robot_ip")
-    launch_rviz = LaunchConfiguration("launch_rviz")
-    description_package = FindPackageShare("my_robot_cell_description")
-    rvizconfig_file = PathJoinSubstitution([description_package, "rviz", "urdf.rviz"])
     declared_arguments = []
     declared_arguments.append(
         DeclareLaunchArgument(
@@ -54,14 +51,6 @@ def generate_launch_description():
     return LaunchDescription(
         declared_arguments
         + [
-            Node(
-                package="rviz2",
-                condition=IfCondition(launch_rviz),
-                executable="rviz2",
-                name="rviz2",
-                output="log",
-                arguments=["-d", rvizconfig_file],
-            ),
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(
                     [
@@ -78,7 +67,13 @@ def generate_launch_description():
                     "ur_type": ur_type,
                     "robot_ip": robot_ip,
                     "tf_prefix": [LaunchConfiguration("ur_type"), "_"],
-                    "launch_rviz": "false",
+                    "rviz_config_file": PathJoinSubstitution(
+                        [
+                            FindPackageShare("my_robot_cell_description"),
+                            "rviz",
+                            "urdf.rviz",
+                        ]
+                    ),
                     "description_launchfile": PathJoinSubstitution(
                         [
                             FindPackageShare("my_robot_cell_control"),
